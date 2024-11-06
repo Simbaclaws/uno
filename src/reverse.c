@@ -14,18 +14,19 @@ int is_private_ip(struct in_addr ip) {
            (addr >> 24 == 127); // 127.0.0.0/8
 }
 
-// Function to add a DROP rule to the firewall
-void add_drop_rule(const char *ip) {
+// Function to add a REJECT rule to the firewall
+void add_reject_rule(const char *ip) {
     char command[256];
 
     // Example for iptables (Linux)
-    snprintf(command, sizeof(command), "iptables -A INPUT -s %s -j DROP", ip);
+    snprintf(command, sizeof(command), "iptables -A INPUT -s %s -j REJECT --reject-with icmp-port-unreachable", ip);
     system(command);
 
     // Example for Windows Firewall (Windows)
-    snprintf(command, sizeof(command), "netsh advfirewall firewall add rule name=\"Drop %s\" dir=in action=block remoteip=%s", ip, ip);
+    snprintf(command, sizeof(command), "netsh advfirewall firewall add rule name=\"Reject %s\" dir=in action=block remoteip=%s", ip, ip);
     system(command);
 }
+
 
 void packet_handler(u_char *user, const struct pcap_pkthdr *pkthdr, const u_char *packet) {
     struct ip *ip_header = (struct ip *)(packet + 14); // Ethernet header is 14 bytes
@@ -41,7 +42,7 @@ void packet_handler(u_char *user, const struct pcap_pkthdr *pkthdr, const u_char
     // Check if the source IP is non-private
     if (!is_private_ip(ip_header->ip_src)) {
         // Add a DROP rule for the source IP
-        add_drop_rule(inet_ntoa(ip_header->ip_src));
+        add_reject_rule(inet_ntoa(ip_header->ip_src));
 
         // Send the packet back to the sender
         struct sockaddr_in dest;
