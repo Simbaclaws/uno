@@ -2,7 +2,8 @@
 
 ## Overview
 
-**Uno** is a command-line networking tool written in C that listens to all inbound network traffic from any non-private address range, logs the traffic, drops it, and sends it back to its origin. The tool is named "reverse" and can be configured to run on different network interfaces.## Prerequisites
+**Uno** is a command-line networking tool written in C that listens to all inbound network traffic from any non-private address range, logs the traffic, drops it, and sends it back to its origin. The tool is named "reverse" and can be configured to run on different network interfaces.
+## Prerequisites
 
 Ensure you have the following dependencies installed:
 
