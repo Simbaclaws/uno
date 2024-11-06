@@ -53,7 +53,7 @@ Run the tool with the specified network interface:
 
 This tool requires root privileges.
 ```bash
-sudo reverse -i <network_interface>
+sudo /usr/local/bin/reverse -i <network_interface>
 ```
 
 ### On Windows:
