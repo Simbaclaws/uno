@@ -92,6 +92,25 @@ Run the following command in a powershell window with admin privileges:
 
 Replace `<network_interface>` with the appropriate network interface on your system (e.g., `eth0`).
 
+### Command Line Flags
+
+- `-i <interface>`: Specifies the network interface to listen on.
+- `-r <repeat_count>`: Specifies the number of times to send the packet back. The default is 1.
+
+### Example Usage
+
+To run the tool on the `eth0` interface and send each packet back 5 times:
+
+### On Unix-like systems:
+```bash
+sudo reverse -i eth0 -r 5
+```
+### On Windows:
+
+Run the following command in a PowerShell window with admin privileges:
+```powershell
+'C:\Program Files\Uno\reverse.exe' -i eth0 -r 5
+```
 ## Project Structure
 ```
 /uno

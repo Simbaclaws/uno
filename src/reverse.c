@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <getopt.h>
 
+int repeat_count = 1; // Default repeat count
+
 // Function to check if an IP address is private
 int is_private_ip(struct in_addr ip) {
     uint32_t addr = ntohl(ip.s_addr);
@@ -27,7 +29,6 @@ void add_reject_rule(const char *ip) {
     system(command);
 }
 
-
 void packet_handler(u_char *user, const struct pcap_pkthdr *pkthdr, const u_char *packet) {
     struct ip *ip_header = (struct ip *)(packet + 14); // Ethernet header is 14 bytes
 
@@ -41,10 +42,10 @@ void packet_handler(u_char *user, const struct pcap_pkthdr *pkthdr, const u_char
 
     // Check if the source IP is non-private
     if (!is_private_ip(ip_header->ip_src)) {
-        // Add a DROP rule for the source IP
+        // Add a REJECT rule for the source IP
         add_reject_rule(inet_ntoa(ip_header->ip_src));
 
-        // Send the packet back to the sender
+        // Send the packet back to the sender in a loop
         struct sockaddr_in dest;
         int sock = socket(AF_INET, SOCK_RAW, IPPROTO_RAW);
         if (sock < 0) {
@@ -54,11 +55,16 @@ void packet_handler(u_char *user, const struct pcap_pkthdr *pkthdr, const u_char
         }
         dest.sin_family = AF_INET;
         dest.sin_addr = ip_header->ip_src;
-        sendto(sock, packet, pkthdr->len, 0, (struct sockaddr *)&dest, sizeof(dest));
-        close(sock);
 
-        // Log the sent packet
-        fprintf(logfile, "Sent packet back to %s\n", inet_ntoa(ip_header->ip_src));
+        for (int i = 0; i < repeat_count; i++) {
+            if (sendto(sock, packet, pkthdr->len, 0, (struct sockaddr *)&dest, sizeof(dest)) < 0) {
+                perror("Sendto failed");
+                break;
+            }
+            fprintf(logfile, "Sent packet back to %s (iteration %d)\n", inet_ntoa(ip_header->ip_src), i + 1);
+            sleep(1); // Add a delay between sends if needed
+        }
+        close(sock);
     }
 
     fclose(logfile);
@@ -71,19 +77,22 @@ int main(int argc, char *argv[]) {
     int opt;
 
     // Parse command line arguments
-    while ((opt = getopt(argc, argv, "i:")) != -1) {
+    while ((opt = getopt(argc, argv, "i:r:")) != -1) {
         switch (opt) {
             case 'i':
                 dev = optarg;
                 break;
+            case 'r':
+                repeat_count = atoi(optarg);
+                break;
             default:
-                fprintf(stderr, "Usage: %s -i <interface>\n", argv[0]);
+                fprintf(stderr, "Usage: %s -i <interface> [-r <repeat_count>]\n", argv[0]);
                 exit(EXIT_FAILURE);
         }
     }
 
     if (dev == NULL) {
-        fprintf(stderr, "Usage: %s -i <interface>\n", argv[0]);
+        fprintf(stderr, "Usage: %s -i <interface> [-r <repeat_count>]\n", argv[0]);
         exit(EXIT_FAILURE);
     }
 
