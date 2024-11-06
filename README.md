@@ -7,47 +7,13 @@
 ### Caution:
 When using this tool your firewall will get a rule for rejecting all incoming traffic. This should only be used on computers that are meant as honeypots and don't require actual networking.
 
-## Prerequisites
-
-Ensure you have the following dependencies installed:
-
-- `libpcap` development libraries
-
-### On Debian-based systems (e.g., Ubuntu):
-```bash
-sudo apt-get install libpcap-dev
-```
-### On Red Hat-based systems (e.g., Fedora):
-```bash
-sudo dnf install libpcap-devel
-```
-### On macOS:
-```bash
-brew install libpcap
-```
-### On Windows:
-Ensure you have `winget` installed. Then, run the following command to install Npcap:
-```powershell
-winget install -e --id Nmap.Npcap
-```
 ## Building the Tool
 
 Clone the repository and navigate to the project directory:
-
+```
 git clone https://github.com/simbaclaws/uno.git
 
 cd uno
-
-Run the dependency check script:
-
-### On Unix-like systems:
-```bash
-chmod +x scripts/check_dependencies.sh
-./scripts/check_dependencies.sh
-```
-### On Windows:
-```powershell
-.\scripts\check_dependencies.ps1
 ```
 Build the tool using `make`:
 ```bash
