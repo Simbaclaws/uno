@@ -32,6 +32,9 @@ To install the tool into the correct path, run the following command:
 ```bash
 sudo make install
 ```
+
+This will copy the `reverse` binary file to `/usr/local/bin`.
+
 ### On Windows:
 
 Run the following command in a PowerShell window with admin privileges:
