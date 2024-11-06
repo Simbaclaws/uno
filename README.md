@@ -104,6 +104,7 @@ Replace `<network_interface>` with the appropriate network interface on your sys
 |   |-- check_dependencies.ps1
 |-- Makefile
 |-- README.md
+|-- LICENSE
 ```
 ## License
 
