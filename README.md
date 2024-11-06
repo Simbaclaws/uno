@@ -1,5 +1,9 @@
 # Uno Networking Tool
 
+## Note
+
+This tool is a WIP that was thought of as a fun side project.
+
 ## Overview
 
 **Uno** is a command-line networking tool written in C that listens to all inbound network traffic from any non-private address range, logs the traffic, rejects it, and sends it back to its origin. The tool is named "reverse" and can be configured to run on different network interfaces.
