@@ -48,6 +48,24 @@ Build the tool using `make`:
 ```bash
 make
 ```
+## Installing the Tool
+
+To install the tool into the correct path, run the following command:
+
+### On Unix-like systems:
+```bash
+sudo make install
+```
+### On Windows:
+
+Run the following command in a PowerShell window with admin privileges:
+```powershell
+make install
+```
+
+This will copy the `reverse.exe` file to `C:\Program Files\Uno`.
+
+
 ## Running the Tool
 
 Run the tool with the specified network interface:
@@ -56,7 +74,7 @@ Run the tool with the specified network interface:
 
 This tool requires root privileges.
 ```bash
-sudo ./reverse -i <network_interface>
+sudo reverse -i <network_interface>
 ```
 
 ### On Windows:
@@ -64,7 +82,7 @@ sudo ./reverse -i <network_interface>
 Run the following command in a powershell window with admin privileges:
 
 ```powershell
-./reverse.exe -i <network_interface>
+"C:\Program Files\Uno\reverse.exe" -i <network_interface>
 ```
 
 Replace `<network_interface>` with the appropriate network interface on your system (e.g., `eth0`).
